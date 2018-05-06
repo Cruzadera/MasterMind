@@ -5,15 +5,31 @@ import static utilidades.Teclado.Incluido.*;
 import static utilidades.Teclado.Tipo.*;
 import static utilidades.Teclado.*;
 
+/**
+ * Clase pública que contiene los menús de interacción con el usuario
+ * @author María Muñoz-Cruzado
+ * @since 1.0
+ * @version 1.0
+ */
 public class Menu {
     private Dificultad dificultad;
     private byte contadorEntrada;
     private byte opcionMenu;
 
+    /**
+     * Constructor que llama al método mostrarMenu(), para pasarle la dificultad a su atributo.
+     */
     public Menu() {
         dificultad = mostrarMenu();
     }
 
+    /**
+     * Muestra el menú principal en el cual tiene tres opciones: empezar a jugar, instrucciones y salir.
+     * Si se elige la opción 1, emepezar a jugar, muestra el siguiente menú llamando al método pregutarDificultad().
+     * La opción 2, muestra las instrucciones del juego, llamando al método mostrarInstrucciones(). Después vuelve a aparecer de nuevo el menú.
+     * Y si se escoge la opción 3, salir, la dificultad que se devuelve es null.
+     * @return Dificultad
+     */
     private Dificultad mostrarMenu() {
         final byte MINIMO = 1, MAXIMO = 3;
         boolean salir = false;
@@ -33,7 +49,7 @@ public class Menu {
                     salir = true;
                     break;
                 case 2:
-                    instrucciones = menuInstrucciones();
+                    instrucciones = mostrarInstrucciones();
                     System.out.println(instrucciones);
                     break;
                 case 3:
@@ -45,6 +61,11 @@ public class Menu {
         return dificultad;
     }
 
+    /**
+     * Pregunta al usuario que dificultad prefiere para empezar la partida. La primeras 4 opciones son las dificultades que puede escoger el usuario.
+     * La última opción, la 5 es volver atrás, para volver al menú principal.
+     * @return Dificultad
+     */
     private Dificultad preguntarDificultad() {
         Dificultad escogida = null;
         int opcion = 0;
@@ -75,7 +96,11 @@ public class Menu {
         return escogida;
     }
 
-    private String menuInstrucciones() {
+    /**
+     * Muestra en formato cadena las instrucciones del juego, tanto de los distintos modos, como de la inserción de las fichas en una combinación
+     * @return Instrucciones
+     */
+    private String mostrarInstrucciones() {
         String resultado = String.format("-------Instrucciones de los distintos modos de juegos-------\nModo fácil (usuario): El jugador es el usuario: la máquina pone la combinación oculta y le va indicando al usuario las respuestas a sus intentos." +
                 "\nModo fácil (máquina): El jugador es la máquina: el usuario pone la combinación oculta y le va indicando a la máquina las respuestas a sus intentos." +
                 "\n\t En estos dos modos fáciles tienen las siguientes caracteristicas: \n" +
@@ -101,8 +126,10 @@ public class Menu {
         return resultado;
     }
 
-
-
+    /**
+     * Muestra las intrucciones para el usuario de cómo debe introducir las distintas fichas de colores para formar una combinación
+     * @return Instrucciones para introducir las fichas
+     */
     private String instruccionesColores() {
         Combinacion combinacionEjemplo = new Combinacion(Dificultad.FACIL_USUARIO);
         combinacionEjemplo.agregarFicha(new Ficha(ROJO));
@@ -113,14 +140,18 @@ public class Menu {
         return resultado;
     }
 
+    /**
+     * Obtiene la dificultad del menú
+     * @return Dificultad
+     */
     public Dificultad getDificultad() {
         return dificultad;
     }
 
-    public String toString() {
-        return String.format("Menú: %s", dificultad.toString());
-    }
-
+    /**
+     * Obtiene la opción escogida por el usuario del menú principal
+     * @return opcionMenu
+     */
     public byte getOpcionMenu() {
         return opcionMenu;
     }

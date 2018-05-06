@@ -10,17 +10,18 @@ package utilidades;
 
 public final class Colores {
     /**
-     * Las distintas formas que puede tener una ficha.
-     * El CIRCULO para las combinaciones introducidas.
-     * El CIRCULO_PEQUEÑO para las respuestas
-     * El TACHADO_CIRCULO para las respuestas que no tienen ningun tipo de acierto.
+     * Constante que determina la forma de una ficha en una combinación
      */
 	public static final char CIRCULO = '\u2b24';
-	public static final char CIRCULO_PEQUENO = '\u23fa';
-	public static final char TACHADO_CIRCULO = '\u2349';
     /**
-     * Los 10 colores disponibles de las diferentes fichas que pueden tomar en una combinación.
+     * Contante que determina la forma de una ficha en una respuesta si es algún tipo de acierto
      */
+	public static final char CIRCULO_PEQUENO = '\u23fa';
+    /**
+     * Constante que determina la forma de una ficha de una respuesta cuando ésta no es correcta.
+     */
+	public static final char TACHADO_CIRCULO = '\u2349';
+
 	private static final String RESET = "\u001B[0m";
 	public static final String NEGRO = "\u001B[30m" + CIRCULO + RESET;
 	public static final String ROJO = "\u001B[31m"+ CIRCULO + RESET;
@@ -33,18 +34,23 @@ public final class Colores {
 	public static final String ROSA = "\u001B[91m" + CIRCULO + RESET;
 	public static final String VERDE_CLARO = "\u001B[92m" + CIRCULO + RESET;
     /**
-     * Los distintos tipos de aciertos que pueden tomar una respuesta.
+     * Constante que determina la forma y el color de una ficha en un respuesta, siendo ésta correcta de color y posición con respecto a una ficha de la combinación.
      */
 	public static final String POSICION_COLOR = "\u001B[31m" + CIRCULO_PEQUENO + RESET;
+    /**
+     * Constante que determina la forma y el color de una ficha en una respuesta, siendo ésta solo acertada en color con respecto a una ficha de una combinación
+     */
 	public static final String COLOR = "\u001B[37m" + CIRCULO_PEQUENO + RESET;
+    /**
+     * Constante que determina la forma y el color de una ficha en una respuesta, siendo ésta incorrecta con respecto a una ficha de la combinación
+     */
 	public static final String NO_ACIERTO = "\u001B[30m" + TACHADO_CIRCULO + RESET; //Aunque no haga falta el color, lo pongo para que me ocupe lo mismo a la hora de dibujar
 
     /**
-     *
-     * @param numero
-     * @param dificultad
-     * @return color de una ficha
      * Permite la asignacion de un color de una ficha de una combinación a través de un número.
+     * @param numero numero del color
+     * @param dificultad para saber que colores asignarles según dicha dificultad.
+     * @return color de una ficha
      */
 	public static String asignacionColores(int numero, Dificultad dificultad){
 		String resultado = "";
@@ -112,10 +118,9 @@ public final class Colores {
 }
 
     /**
-     *
-     * @param numero
-     * @return un tipo de respuesta
      * Permite la asignacion de un tipo de respuesta a través de un número.
+     * @param numero valor que puede tomar una respuesta. 1- No acierto, 2- Acierto solo de color, 3- Acierto completo
+     * @return un tipo de respuesta
      */
 
     public static String asignacionColoresRespuestas(int numero){

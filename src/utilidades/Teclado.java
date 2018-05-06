@@ -7,7 +7,6 @@ import java.util.InputMismatchException;
  * 
  * Permite leer carácteres, cadenas y numeros por teclado.
  * @author Fco Javier Florín Cárdenas
-
  */
 public class Teclado {
 	

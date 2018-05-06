@@ -4,11 +4,15 @@ import utilidades.Dificultad;
 
 import java.util.HashMap;
 import java.util.Random;
-import java.util.TreeMap;
 
+/**
+ * Clase hija de Jugador, que corresponde con la Inteligencia Artifical del juego.
+ * @author María Muñoz-Cruzado
+ * @since 1.0
+ * @version 1.0
+ */
 public class IA extends Jugador {
     private HashMap<Integer, String> mapa = new HashMap<>(); //El mapa se utiliza para no tener repeticion de colores (Fichas)
-    private TreeMap<Integer, Ficha> combinacionPosible = new TreeMap<>();
     private HashMap<String, Integer> coloresCombinacion = new HashMap<>(); //Lo usamos para guardar cuantas veces sale un color
     private Ficha fichaNoColor = null;
     private boolean noColor = false;
@@ -28,7 +32,7 @@ public class IA extends Jugador {
         if (dificultad == Dificultad.DIFICIL) {
             //Compruebo cual es la primer color que no hay
             if (!noColor && !mapaAciertos.isEmpty() && numeroAciertosCompletos() == 0) {
-                fichaNoColor = tablero.getCombinacion(numIntentos - 1).getFichaCombinacion(0);
+                fichaNoColor = tablero.getCombinacion(numIntentos - 1).obtenerFichaCombinacion(0);
                 noColor = true;
             }
             //Compruebo el número de aciertos completos de la combinacion anterior
@@ -42,7 +46,7 @@ public class IA extends Jugador {
                 } else {
                     if (coloresCombinacion.containsKey(asignacionColores(posicionPosible, dificultad)) && i < coloresCombinacion.get(asignacionColores(numColores, dificultad))) {
                         combinacionMaquina.agregarFicha(posicionPosible, new Ficha(asignacionColores(numColores, dificultad)));
-                        if (!tablero.getRespuestas().isEmpty() && tablero.getRespuesta(numIntentos-1).getFichaCombinacion(0).compararColor(COLOR)) {
+                        if (!tablero.getRespuestas().isEmpty() && tablero.obtenerRespuestaTablero(numIntentos-1).obtenerFichaCombinacion(0).compararColor(COLOR)) {
                             combinacionMaquina.agregarFicha(posicionPosible + 1, new Ficha(asignacionColores(numColores, dificultad)));
                             posicionPosible++;
                         }
@@ -57,6 +61,11 @@ public class IA extends Jugador {
         return combinacionMaquina;
     }
 
+    /**
+     * Crea una combinación oculta de manera aleatoria.
+     * @param conRepeticion si es true crea una combinacion con repeticiones y sino sin ellas.
+     * @return Combinacion
+     */
     public Combinacion crearCombinacionOculta(boolean conRepeticion) {
         int colorAleatorio;
         Random aleatorio = new Random();

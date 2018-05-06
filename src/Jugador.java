@@ -5,7 +5,8 @@ import java.util.*;
 import static utilidades.Colores.*;
 
 /**
- * @author María
+ * Clase abstracta que tiene todas las funciones comunes de un jugador
+ * @author María Muñoz-Cruzado
  * @version 1.0
  * @since 1.0
  *
@@ -23,9 +24,8 @@ public abstract class Jugador {
     }
 
     /**
-     *
+     * Agrega una respuesta al tablero del usuario con respecto a la última combinación introducida.
      * @return LinckedHashMap
-     * Agrega una respuesta al tablero del usuario con respecto a la última combinación introducida
      */
     //Tercer método que rellena las respuestas y las introduce dentro del tablero del Jugador
     public LinkedHashMap<Integer, Combinacion> rellenarRespuestas() {
@@ -46,16 +46,15 @@ public abstract class Jugador {
     }
 
     /**
-     *
+     * Comprueba los aciertos completos, es decir, los de color y posición. Si hay acierto coloca una ficha roja
      * @return LinckedHashMap
-     * Comprueba los aciertos completos, es decir, los de color y posición.
-     * Si hay acierto coloca una ficha roja
+     *
      */
     //Primero tenemos que comprobar los aciertos completos: color y posición.
     private LinkedHashMap<Integer, Ficha> comprobarAciertosCompletos() {
         LinkedHashMap<Integer, Ficha> mapaAciertosCompletos = new LinkedHashMap<>();
         for (int i = 0; i < tablero.getCombinacion(numRespuestas).getTamanoCombinacion(); i++) {
-            if (combinacionSecreta.getFichaCombinacion(i).compararFicha(tablero.getCombinacion(numRespuestas).getFichaCombinacion(i))){
+            if (combinacionSecreta.obtenerFichaCombinacion(i).compararFicha(tablero.getCombinacion(numRespuestas).obtenerFichaCombinacion(i))){
                 mapaAciertosCompletos.put(i, new Ficha(POSICION_COLOR));
             }
         }
@@ -63,9 +62,9 @@ public abstract class Jugador {
     }
 
     /**
-     *
+     * Comprueba los aciertos de color, de la última combinación introducida. Teniendo en cuenta los aciertos completos del método comprobarAciertosCompletos()
      * @return LinckedHashMap
-     *  Comprueba los aciertos de color, de la última combinación introducida. Teniendo en cuenta los aciertos completos del método comprobarAciertosCompletos()
+     *
      */
     //	Segundo método que comprueba si los aciertos son solo de color
     private LinkedHashMap<Integer, Ficha> comprobarAciertosColor() {
@@ -77,7 +76,7 @@ public abstract class Jugador {
         for (int i = 0; i < tablero.getCombinacion(numRespuestas).getTamanoCombinacion(); i++) {
             for (int j = 0; j < combinacionSecreta.getTamanoCombinacion(); j++) {
                 if (!comprobarAciertosCompletos().containsKey(j) && !comprobarAciertosCompletos().containsKey(i) && !mapaAciertos.containsKey(j)
-                        && !posicionesSaltar.contains(i) && combinacionSecreta.getFichaCombinacion(i).compararFicha(tablero.getCombinacion(numRespuestas).getFichaCombinacion(j))) {
+                        && !posicionesSaltar.contains(i) && combinacionSecreta.obtenerFichaCombinacion(i).compararFicha(tablero.getCombinacion(numRespuestas).obtenerFichaCombinacion(j))) {
                     mapaAciertos.put(j, new Ficha(COLOR));
                     posicionesSaltar.add(i);
                 }
@@ -88,8 +87,8 @@ public abstract class Jugador {
     }
 
     /**
-     *
-     * @return numero de aciertos completos de la última combinación introducida
+     * Devuelve el número de aciertos completos de la última combinación introducida
+     * @return int numeroAciertosCompletos
      */
     public int numeroAciertosCompletos(){
         int numero = 0;
@@ -104,8 +103,8 @@ public abstract class Jugador {
     }
 
     /**
-     *
-     * @return numero de aciertos de color de la última combinación introducida
+     * Devuelve el número de aciertos de color de la última combinación introducida
+     * @return int numAciertosColor
      */
     public int numeroAciertosColor(){
         int numero = 0;
@@ -120,24 +119,24 @@ public abstract class Jugador {
     }
 
     /**
+     *  Comprueba si una respuesta introducida es igual a la respuesta correcta, teniendo en cuenta sólo el número de aciertos completos.
+     *  Si devuelve true son iguales, y sino son distintas.
+     * @param respuestaAComprobar respuesta que se desea comprobar
+     * @param respuestaCorrecta respuesta correcta con la que se compara
+     * @return boolean si es true: son iguales, si es false: no son iguales
      *
-     * @param respuestaAComprobar
-     * @param respuestaCorrecta
-     * @return boolean
-     * Comprueba si una respuesta introducida es igual a la respuesta correcta, teniendo en cuenta sólo el número de aciertos completos.
-     * Si devuelve true son iguales, y sino son distintas.
      */
     public boolean comprobarAciertosCompletos (Combinacion respuestaAComprobar, Combinacion respuestaCorrecta){
         int aciertosCompletosC = 0, aciertosCompletosA = 0;
         boolean mismoNumeroAciertosCompletos = false;
 
         for(int i = 0; i<dificultad.getNumFichas(); i++){
-            if(respuestaCorrecta.getFichaCombinacion(i).compararColor(POSICION_COLOR)){
+            if(respuestaCorrecta.obtenerFichaCombinacion(i).compararColor(POSICION_COLOR)){
                 aciertosCompletosC++;
             }
         }
         for(int i = 0; i<dificultad.getNumFichas(); i++){
-            if(respuestaAComprobar.getFichaCombinacion(i).compararColor(POSICION_COLOR)){
+            if(respuestaAComprobar.obtenerFichaCombinacion(i).compararColor(POSICION_COLOR)){
                 aciertosCompletosA++;
             }
         }
@@ -150,25 +149,25 @@ public abstract class Jugador {
     }
 
     /**
-     *
-     * @param respuestaAComprobar
-     * @param respuestaCorrecta
+     *  Comprueba si una respuesta introducida es igual a la respuesta correcta, teniendo en cuenta sólo el número de aciertos de color.
+     *  Si devuelve true son iguales, y sino son distintas.
+     * @param respuestaAComprobar respuesta que se desea comprobar
+     * @param respuestaCorrecta respuesta correcta con la que se compara
      * @return boolean
-     * Comprueba si una respuesta introducida es igual a la respuesta correcta, teniendo en cuenta sólo el número de aciertos de color.
-     * Si devuelve true son iguales, y sino son distintas.
+     *
      */
     public boolean comprobarAciertosColor (Combinacion respuestaAComprobar, Combinacion respuestaCorrecta){
         int aciertosColorC = 0, aciertosColorA = 0;
         boolean mismoNumeroAciertosColor = false;
 
         for(int i = 0; i<dificultad.getNumFichas(); i++){
-            if(respuestaCorrecta.getFichaCombinacion(i).compararColor(COLOR)){
+            if(respuestaCorrecta.obtenerFichaCombinacion(i).compararColor(COLOR)){
                 aciertosColorC++;
             }
         }
 
         for(int i = 0; i<dificultad.getNumFichas(); i++){
-            if(respuestaAComprobar.getFichaCombinacion(i).compararColor(COLOR)){
+            if(respuestaAComprobar.obtenerFichaCombinacion(i).compararColor(COLOR)){
                 aciertosColorA++;
             }
         }
@@ -179,14 +178,26 @@ public abstract class Jugador {
         return mismoNumeroAciertosColor;
     }
 
+    /**
+     * Devuelve el atributo tablero del jugador.
+     * @return tablero
+     */
     public Tablero getTablero() {
         return tablero;
     }
 
+    /**
+     * Obtiene la combinacion secreta que tiene que resolver el Jugador
+     * @param combinacionSecreta combinacion que tiene que resolver el Jugador
+     */
     public void setCombinacionSecreta(Combinacion combinacionSecreta) {
         this.combinacionSecreta = combinacionSecreta;
     }
 
+    /**
+     * Obtiene la dificultad del Jugador
+     * @param dificultad dificultad en la que juega el Jugador
+     */
     public void setDificultad(Dificultad dificultad) {
         this.dificultad = dificultad;
     }

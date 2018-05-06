@@ -3,6 +3,12 @@ import utilidades.Dificultad;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+/**
+ * Clase pública que guarda toda la información del tablero del juego.
+ * @author María Muñoz-Cruzado
+ * @version 1.0
+ * @since 1.0
+ */
 public class Tablero implements DibujableTablero {
     private ArrayList<Combinacion> combinaciones;
     private LinkedHashMap<Integer, Combinacion> respuestas;
@@ -15,6 +21,10 @@ public class Tablero implements DibujableTablero {
         respuestas = new LinkedHashMap<>();
     }
 
+    /**
+     * Dibuja el tablero de un Jugador
+     * @return String
+     */
     public String dibujar() {
         String resultado = "";
         String espacio = " ";
@@ -35,6 +45,11 @@ public class Tablero implements DibujableTablero {
         return resultado;
     }
 
+    /**
+     * Dibuja dos tableros a la vez, de dos jugadores distintos. El primer tablero lo coge del tablero del jugador
+     * @param tablero2 el segundo tablero que se desea dibujar
+     * @return String
+     */
     public String dibujarTableros(Tablero tablero2) {
         String resultado = "";
         int aux = 1;
@@ -77,24 +92,44 @@ public class Tablero implements DibujableTablero {
         return resultado;
     }
 
+    /**
+     * Obtiene las respuestas del tablero
+     * @return LinkedHashMap
+     */
     public LinkedHashMap<Integer, Combinacion> getRespuestas() {
         return respuestas;
     }
 
-    public Combinacion getRespuesta(int posicion) {
+    /**
+     * Devuelve una respuesta concreta del tablero indicada por una posición
+     * @param posicion posición en la que se desea obtener dicha respuesta.
+     * @return Combinacion respuesta
+     */
+    public Combinacion obtenerRespuestaTablero(int posicion) {
         return respuestas.get(posicion);
     }
-    public void borrarRespuesta(int posicion){
-        respuestas.get(posicion).borrarCombinacion();
-    }
+
+    /**
+     * Añade una respuesta a las respuestas del tablero, indicandole la posición y la respuesta que se le desea añadir.
+     * @param i posición en la que se desea agregar la respuesta
+     * @param respuesta respuesta escogida para añadir
+     */
     public void agregarRespuesta(Integer i, Combinacion respuesta) {
         respuestas.put(i, respuesta);
     }
-
+    /**
+     * Añade una combinación a las combinaciones del tablero, indicandole sólo la combinación que se le desea añadir.
+     * @param combinacion combinación que se desea añadir
+     */
     public void agregarCombinacion(Combinacion combinacion) {
         combinaciones.add(combinacion);
     }
 
+    /**
+     * Devuelve una combinación del tablero indicada por una posición
+     * @param posicion posicion deseada para obtener la combinacion
+     * @return Combinacion
+     */
     public Combinacion getCombinacion(int posicion) {
         return combinaciones.get(posicion);
     }

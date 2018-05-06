@@ -3,6 +3,12 @@ import static utilidades.Dificultad.*;
 import static utilidades.Teclado.*;
 import static utilidades.Colores.*;
 
+/**
+ * Clase que se encarga de que comience la partida y se desarrolle
+ * @author María Muñoz-Cruzado
+ * @version 1.0
+ * @since 1.0
+ */
 public class Partida {
 	private Dificultad dificultad;
 	private Combinacion combinacionAResolver;
@@ -15,6 +21,15 @@ public class Partida {
 		determinarPartida();
 	}
 
+    /**
+     * Identifica el tipo de partida que se va a jugar teniendo en cuenta la dificultad, y después llama al tipo de partida correspondiente.
+     * Cuando acaba la partida el usuario tiene la opción de poder reiniciar la partida, elegir otra dificultad o salir.
+     * @see #partidaFacilUsuario()
+     * @see #partidaFacilMaquina()
+     * @see #partidaMedia()
+     * @see #partidaDificil()
+     * @see #reiniciarPartida()
+     */
 	private void determinarPartida(){
 		IA maquina = new IA(dificultad);
 		IA maquina2 = new IA(dificultad);
@@ -62,10 +77,9 @@ public class Partida {
 		reiniciarPartida();
 	}
 
-	public String toString() {
-		return String.format("COMBINACION OCULTA: %s\n", combinacionAResolver.dibujar());
-	}
-
+    /**
+     * Empieza la partida en modo fácil-usuario. El Usuario tiene que resolver una combinación oculta generada aleatoriamente por la máquina
+     */
 	private void partidaFacilUsuario() {
 		Combinacion combinacionUser = new Combinacion(dificultad);
 		Usuario usuario = new Usuario(dificultad);
@@ -88,6 +102,9 @@ public class Partida {
 
 	}
 
+    /**
+     * Da comienzo la partida en modo fácil-máquina en el cual la máquina tiene que resolver una combinación que es pedida al Usuario.
+     */
 	private void partidaFacilMaquina(){
 		IA maquina = new IA(dificultad);
 		Usuario usuario = new Usuario(dificultad);
@@ -105,10 +122,10 @@ public class Partida {
 			//Comprobamos que el usuario ha metido la respuesta correcta, es decir, el mismo número de aciertos.
 			do {
 				respuestaUser = usuario.preguntarRespuestas();
-				if(!(usuario.comprobarAciertosCompletos(respuestaUser, maquina.getTablero().getRespuesta(numIntentos)) && usuario.comprobarAciertosColor(respuestaUser, maquina.getTablero().getRespuesta(numIntentos)))){
+				if(!(usuario.comprobarAciertosCompletos(respuestaUser, maquina.getTablero().obtenerRespuestaTablero(numIntentos)) && usuario.comprobarAciertosColor(respuestaUser, maquina.getTablero().obtenerRespuestaTablero(numIntentos)))){
 					System.err.println("Respuesta Incorrecta. Vuelve a introducirla por favor.");
 				}
-			} while (!(usuario.comprobarAciertosCompletos(respuestaUser, maquina.getTablero().getRespuesta(numIntentos)) && usuario.comprobarAciertosColor(respuestaUser, maquina.getTablero().getRespuesta(numIntentos))));
+			} while (!(usuario.comprobarAciertosCompletos(respuestaUser, maquina.getTablero().obtenerRespuestaTablero(numIntentos)) && usuario.comprobarAciertosColor(respuestaUser, maquina.getTablero().obtenerRespuestaTablero(numIntentos))));
 			numIntentos++;
 		}
 		if(combinacionAResolver.equals(combinacionMaquina)){
@@ -119,6 +136,9 @@ public class Partida {
 		}
 	}
 
+    /**
+     * Comienza la partida en dificultad media, es decir, IA contra Usuario. Acaba la partida en el intento número 15 si ninguno lo ha resuelto antes.
+     */
 	private void partidaMedia(){
 	    byte resCompletaUser = 0, resColorUser = 0, resCompletaMaquina = 0, resColorMaquina = 0;
 		IA maquina = new IA(dificultad);
@@ -151,16 +171,16 @@ public class Partida {
 		}else if(!combinacionAResolver2.equals(combinacionMaquina) && !combinacionAResolver.equals(combinacionUser)){
 		    //Si nadie acierta en el último intento
 		    for(int i = 0; i<dificultad.getNumFichas(); i++){
-		        if(usuario.getTablero().getRespuesta(numIntentos - 1).getFichaCombinacion(i).compararColor(POSICION_COLOR)){
+		        if(usuario.getTablero().obtenerRespuestaTablero(numIntentos - 1).obtenerFichaCombinacion(i).compararColor(POSICION_COLOR)){
 		            resCompletaUser++;
-                }else if(usuario.getTablero().getRespuesta(numIntentos - 1).getFichaCombinacion(i).compararColor(COLOR)){
+                }else if(usuario.getTablero().obtenerRespuestaTablero(numIntentos - 1).obtenerFichaCombinacion(i).compararColor(COLOR)){
 		            resColorUser++;
                 }
             }
             for(int i = 0; i<dificultad.getNumFichas(); i++){
-				if(maquina.getTablero().getRespuesta(numIntentos - 1).getFichaCombinacion(i).compararColor(POSICION_COLOR)){
+				if(maquina.getTablero().obtenerRespuestaTablero(numIntentos - 1).obtenerFichaCombinacion(i).compararColor(POSICION_COLOR)){
 					resCompletaMaquina++;
-				}else if(maquina.getTablero().getRespuesta(numIntentos - 1).getFichaCombinacion(i).compararColor(COLOR)){
+				}else if(maquina.getTablero().obtenerRespuestaTablero(numIntentos - 1).obtenerFichaCombinacion(i).compararColor(COLOR)){
 					resColorMaquina++;
 				}
 			}
@@ -182,6 +202,10 @@ public class Partida {
 		}
 
 	}
+
+    /**
+     * Empieza la partida en modo dificil, es decir, IA contra IA. El número de intentos es ilimitado.
+     */
 	private void partidaDificil() {
 		IA maquina1 = new IA(DIFICIL);
 		IA maquina2 = new IA(DIFICIL);
@@ -208,6 +232,10 @@ public class Partida {
 
 
 	}
+
+    /**
+     * Menú que se muestra siempre al acabar cualquier tipo de partida, le permite al Usuario poder reiniciar la partida, regresar al menu principal o salir.
+     */
 	private void reiniciarPartida(){
 	    final byte MINIMO = 1, MAXIMO = 3;
 	    boolean salir = false;
